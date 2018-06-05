@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "tidy-scholar-206207",
+  "private_key_id": "5751fdbd900cca815ad4b543dc7790cd9a9d11f9",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDBmE3NXragaQuK\ncbzz2IYCEBLU9lLhJDCHwGss5oFOdto3cIU1p72IvSTWo+YAMWMS9CW3ikZmtwqz\nD1UnnJ7/VM8VQkGouM5umBM8IrAujjd5u4chG7VqTtb40lazUN9WDJX3mtaJ7X9L\nXJw8ShAf9rxaTaD9PyOa58FvluAkt54ebMIg66tMaBqOmEBqatTimuOhHrminMVI\nX7TRHHRBAin8u7PZmfO3N0ey6IR7RNXC83u7Tjdvwzp51Y90IgRDExL5+betgBkX\n+VgwWvIqXPxFe/c8e41rj3VU0vkUdpN9zuqetU/G9hJ1i/OwsKEdPkMtWlmSVJwl\n50goC/DlAgMBAAECggEABlW2Agjd3/zf+E1FehM1O18MRrSyvJRDFEYbG7KFO6yO\n8m53pWxSOuW5jV56mboD/GxJyao4KIdHzdksF6o7164OQqtS27MEakEGrBqUekmE\nDjMxNkeiVZKz3RuA48g7LqUlyR7jc0r2teAXaq+fvHQF8MyGfpLw1tJLlZuxxPHA\noUbbVNWIliuw0hWwtErbpmjKhvgGvP9ftEih7v974FSyeC4iD6+TsYmd7o7964E5\nAvcYMb+sHEPmg0uLb0aoIRpFpaHg2U4py2dkHh1kxEi1SE6VNeZB7u5LkzFBjel5\n5L7MYXbcUtXZRSeDSm7ZxnkQcp/ZzOjHb+Rj3S6wgQKBgQDoGvyVUspHSAK43e7Z\nAemM0MX2AguG91Mc5lKk3WXb57ljja4Z4jivj9jlW3BqWzZumFzdqlEZWx+fDB8Z\n3DsohY2Kibm9rlehAOPF96547kTESpXCVz28RpCxdWpZhlhJZMG2tlGtUwaUDqTC\nOcFpmp2X/HsF1eJmicXyjVzxpQKBgQDVhmTw2yiQCs8mJhDeIP3qgd9SSIWI2uev\ntK2Yj6/ORM18BJ4yEmbkKZmJxjLd9eZZxh8al+YJBLOCsc8zx4WE7HKkUvC2tPcJ\nLsIQ0Wmyg3vjlH3Pm5c/uRzJi2OFNn5KT2dvcdIkP/ycyFbQxvVmREXz/Lq/Yabf\nR/3KKlheQQKBgQCZTEGpCj5JaBlMKmC3eVjcxYMKIX2ljbKaMtFAzG2bGWhLhWcI\n924DHlnd2k/cHxRLZVxolzXrLlErReFAvkFgWR0L9Dz2N7DuyNyngxf8DTrj/nL9\nIYvHzz9/xZIRQPcMunxrBe3aMSz2Gtnc4jKJYjJWEM7cItDecn6H3bAWdQKBgQCI\n6GwudwcyHIwn1L55/sNwKqerVa6xSlLFuV6ZdH/wDPOIMlnQlzX706SLz1ZsNS/m\nnf7xiTXI0IfdI+9MLwEwcn8rV7baH3xKGf361JsmB+JW0K4+gG/hPurzW3mLP56I\nPROARIXOEm0Bhf8MTJWqZdpIj+KZtZ5OihVzG+WfQQKBgQDcOmXLSGcqp5aH2NUl\nCVpa2lpNyCDQzU7AOPBHhWJIi0NmNBkKr0BzA7Tg7lFbfZFtSHxMZE8oGTCVJ48o\nv4S3lFNNt+UmOS8NopT0+al7pNJmRHLWEYpLAVUzquGetrrAVJQee1D73dOh724j\nRd3am6SBqM970WQ6zZ5EdVEz1Q==\n-----END PRIVATE KEY-----\n",
+  "client_email": "subtitler@tidy-scholar-206207.iam.gserviceaccount.com",
+  "client_id": "117233995874690388898",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/subtitler%40tidy-scholar-206207.iam.gserviceaccount.com"
+}
