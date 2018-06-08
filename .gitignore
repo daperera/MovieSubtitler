@@ -1,4 +1,7 @@
-﻿*.class 
+﻿# Binaries
+bin
 
-
+# Eclipse artifacts
 /.classpath
+/.project
+.settings

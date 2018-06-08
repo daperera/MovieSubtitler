@@ -23,8 +23,8 @@ public class App
 
 	public static void main( String[] args ) throws Exception
 	{
-		test();
-		//		testSubtitleExtraction();
+		//test();
+				testSubtitleExtraction();
 		//		testSubtitleDownload();
 	}
 
