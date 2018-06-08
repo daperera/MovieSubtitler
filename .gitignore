@@ -5,3 +5,9 @@ bin
 /.classpath
 /.project
 .settings
+
+# Maven artifacts
+target
+
+# Project-linked artifacts
+log/*
