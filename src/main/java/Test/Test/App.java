@@ -11,8 +11,10 @@ import java.util.List;
 import com.google.cloud.speech.v1.RecognizeResponse;
 import com.google.cloud.speech.v1.SpeechRecognitionAlternative;
 import com.google.cloud.speech.v1.SpeechRecognitionResult;
-import com.google.cloud.speech.v1.WordInfo;
 import com.google.protobuf.ByteString;
+
+import Test.Test.old.Xuggler;
+import Test.Test.subtitle.Time;
 
 /**
  * Hello world!
@@ -23,38 +25,68 @@ public class App
 
 	public static void main( String[] args ) throws Exception
 	{
-		//test();
-				testSubtitleExtraction();
-		//		testSubtitleDownload();
+		
+		// start Time
+		long startTime = System.currentTimeMillis();
+		
+		/* *********************************************** */
+		
+		// execute method
+//		testAudioExtraction();
+		testSubtitleExtraction("data/audio/out001bis.wav", 48000);
+//		test();
+//		testSubtitleDownload();
+		
+		/* *********************************************** */
+		
+		// end time
+		long endTime = System.currentTimeMillis();
+		Time duration = new Time(endTime - startTime);
+		System.out.println("Elapsed time : " + duration);
 	}
 
-	private static void test() {
-		Time t = SubtitleFactory.timeFromSrt("00:36:46,280");
+	public static void test() {
+		Time t = Time.timeFromSrt("00:36:46,280");
 		System.out.println(t);
 	}
 
-	public static void testSubtitleExtraction() {
+	public static void testAudioExtraction() {
+		String file = "data/video/chihaya.mkv";
+        String to = "data/audio/chihaya.mp3";
+        Xuggler.convert(file, to);
+	}
+	
+	public static void testSubtitleExtraction(int nSplit, int sampleRate) {
+		for(int k=0; k<nSplit; k++) {
+			String filename = "data/audio/out" + String.format("%03d", k) + ".mp3";
+			testSubtitleExtraction(filename, sampleRate);
+		}
+	}
+	
+	public static void testSubtitleExtraction(String filename, int sampleRate) {
 
 		try {
 			// The path to the audio file to transcribe
-			String fileName = "data/audio/sample.wav";
-
+			
 			// Reads the audio file into memory
-			Path path = Paths.get(fileName);
+			Path path = Paths.get(filename);
 			byte[] data = Files.readAllBytes(path);
 			ByteString audioBytes = ByteString.copyFrom(data);
 
 			// Extract subtitles
 			System.out.println("Extracting subtitles");
-			RecognizeResponse response = SubtitleExtractor.extractSubtitles(audioBytes);
+			RecognizeResponse response = SpeechRecognizer.extractSubtitles(audioBytes, sampleRate);
 
 			// display extracted subtitles
 			List<SpeechRecognitionResult> results = response.getResultsList();
+			if(response.getResultsList().isEmpty()) 
+				System.out.println("Error : empty list found");
 			for (SpeechRecognitionResult result : results) {
 				// There can be several alternative transcripts for a given chunk of speech. Just use the
 				// first (most likely) one here.
 				SpeechRecognitionAlternative alternative = result.getAlternativesList().get(0);
 				System.out.printf("Transcription: %s\n", alternative.getTranscript());
+			/*	
 				for (WordInfo wordInfo : alternative.getWordsList()) {
 					System.out.println(wordInfo.getWord());
 					System.out.printf("\t%s.%s sec - %s.%s sec\n",
@@ -63,7 +95,7 @@ public class App
 							wordInfo.getEndTime().getSeconds(),
 							wordInfo.getEndTime().getNanos() / 100000000);
 				}
-
+*/
 			}
 
 		} catch(Exception e) {

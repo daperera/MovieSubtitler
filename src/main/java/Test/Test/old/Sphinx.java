@@ -1,4 +1,4 @@
-package Test.Test;
+package Test.Test.old;
 
 import java.io.File;
 import java.net.URL;
@@ -8,9 +8,10 @@ import java.util.Scanner;
 
 import edu.cmu.sphinx.alignment.LongTextAligner;
 import edu.cmu.sphinx.api.SpeechAligner;
+import edu.cmu.sphinx.linguist.dictionary.Word;
 import edu.cmu.sphinx.result.WordResult;
 
-public class SubtitleAligner {
+public class Sphinx {
 	private static final String ACOUSTIC_MODEL_PATH =
 			"resource:/edu/cmu/sphinx/models/en-us/en-us";
 	private static final String DICTIONARY_PATH =
@@ -27,7 +28,7 @@ public class SubtitleAligner {
 			transcript = scanner.next();
 			scanner.close();
 		} else {
-			audioUrl = new URL("file:data/audio/sample.wav");
+			audioUrl = new URL("file:data/audio/sample2.wav");
 			transcript = TEXT;
 		}
 		if(audioUrl==null)
@@ -40,11 +41,20 @@ public class SubtitleAligner {
 						new SpeechAligner(acousticModelPath, dictionaryPath, g2pPath);
 
 				List<WordResult> results = aligner.align(audioUrl, transcript);
+				
+				for(WordResult wr : results) {
+					String word = wr.getWord().toString();
+					String timeFrame = wr.getTimeFrame().toString();
+					System.out.println("word : '" + word + "' occuring at time " + timeFrame);
+				}
+				
+				/*
 				List<String> stringResults = new ArrayList<String>();
 				for (WordResult wr : results) {
 					stringResults.add(wr.getWord().getSpelling());
 				}
 
+				
 				LongTextAligner textAligner =
 						new LongTextAligner(stringResults, 2);
 				List<String> sentences = aligner.getTokenizer().expand(transcript);
@@ -78,5 +88,6 @@ public class SubtitleAligner {
 								.getSpelling(), result.getTimeFrame());
 					}
 				}
+				*/
 	}
 }

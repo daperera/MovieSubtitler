@@ -16,12 +16,15 @@ import com.google.cloud.speech.v1.SpeechSettings;
 import com.google.protobuf.ByteString;
 
 
-public class SubtitleExtractor {
+public class SpeechRecognizer {
 
+	// request payload size limit 
+	public static final long SIZE_LIMIT = 10485760;
+	
 	// The path to google credentials
 	private static final String GOOGLE_CREDENTIAL_PATH = "data/google_credentials/subtitler project.json";
 	
-	public static RecognizeResponse extractSubtitles(ByteString audioBytes) throws Exception {
+	public static RecognizeResponse extractSubtitles(ByteString audioBytes, int sampleRate) throws Exception {
 		RecognizeResponse response = null;
 		SpeechClient speechClient = null;
 		
@@ -36,7 +39,7 @@ public class SubtitleExtractor {
 			// Builds the sync recognize request
 			RecognitionConfig config = RecognitionConfig.newBuilder()
 					.setEncoding(AudioEncoding.LINEAR16)
-					//       .setSampleRateHertz(16000)
+					.setSampleRateHertz(sampleRate)
 					.setLanguageCode("en-US")
 					.setEnableWordTimeOffsets(true)
 					.build();
@@ -46,7 +49,6 @@ public class SubtitleExtractor {
 
 			// Performs speech recognition on the audio file
 			response = speechClient.recognize(config, audio);
-
 			
 		} catch (Exception e) {
 			e.printStackTrace();

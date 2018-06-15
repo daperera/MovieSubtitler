@@ -1,20 +1,21 @@
-package Test.Test;
+package Test.Test.subtitle;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class Subtitle {
 	private long maxId;
 	private final Map<Long, String> word;
-	private final Map<Long, Duration> timestamp;
+	private final Map<Long, WordDuration> timestamp;
 
 	public Subtitle() {
 		maxId = 0;
 		word = new HashMap<Long, String>();
-		timestamp = new HashMap<Long, Duration>();
+		timestamp = new HashMap<Long, WordDuration>();
 	}
 
-	public void put(String word, Duration timestamp) {
+	public void put(String word, WordDuration timestamp) {
 		this.word.put(maxId, word);
 		this.timestamp.put(maxId, timestamp);
 		maxId++;
@@ -52,5 +53,32 @@ public class Subtitle {
 				subSample.put(word.get(k), timestamp.get(k));
 		}
 		return subSample;
+	}
+	
+	public Subtitle shift(Time t) {
+		for(Entry<Long, WordDuration> e : timestamp.entrySet()) {
+			e.getValue().shift(t);
+		}
+		return this;
+	}
+	
+	public Subtitle shift(long ms) {
+		for(Entry<Long, WordDuration> e : timestamp.entrySet()) {
+			e.getValue().shift(ms);
+		}
+		return this;
+	}
+	
+	public String toString() {
+		String str = "";
+/*
+		for(Entry<Long, String> e : word.entrySet()) {
+			str += e.getValue() + " ";
+		}
+	*/
+		for(long k=0; k<maxId; k++) {
+			str += word.get(k) + " " + timestamp.get(k).toString() + "\n";
+		}
+		return str;
 	}
 }

@@ -11,3 +11,6 @@ target
 
 # Project-linked artifacts
 log/*
+data/audio/*
+data/video/*
+data/subtitles/*
