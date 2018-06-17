@@ -1,6 +1,7 @@
 package Test.Test;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,7 +14,7 @@ import com.google.cloud.speech.v1.SpeechRecognitionAlternative;
 import com.google.cloud.speech.v1.SpeechRecognitionResult;
 import com.google.protobuf.ByteString;
 
-import Test.Test.old.Xuggler;
+import Test.Test.subtitle.Subtitle;
 import Test.Test.subtitle.Time;
 
 /**
@@ -33,9 +34,11 @@ public class App
 		
 		// execute method
 //		testAudioExtraction();
-		testSubtitleExtraction("data/audio/out001bis.wav", 48000);
+//		testSubtitleExtraction("data/audio/out001bis.wav", 48000);
 //		test();
-//		testSubtitleDownload();
+//		testSubtitleDownload("Paterson.2016.1080p.BRRip.x264.AAC-ETRG.mp4", "data/subtitles/paterson.srt");
+		testSynchronization("data/video/Paterson.2016.1080p.BRRip.x264.AAC-ETRG.mp4", "data/subtitles/resync-paterson.srt");
+		
 		
 		/* *********************************************** */
 		
@@ -45,15 +48,38 @@ public class App
 		System.out.println("Elapsed time : " + duration);
 	}
 
-	public static void test() {
-		Time t = Time.timeFromSrt("00:36:46,280");
-		System.out.println(t);
+	public static void testSynchronization(String movieFilename, String outputFilename) {
+		// extracting movieName et setting subtitleFilename
+		String movieName = extractMovieName(movieFilename);
+		String subtitleFilename = "data/subtitles/" + movieName + ".srt";
+		
+		// download subtitle of a movie
+		System.err.println("Downloading subtitles");
+		SubtitleDownloader.downloadSubtitle(movieName, subtitleFilename);
+		
+		// create a subtitle object from downloaded file
+		System.err.println("Parsing downloaded file");
+		Subtitle officialSub = Subtitle.subtitleFromSrtFile(subtitleFilename);
+		
+	
+		// extract sample of subtitle from the movie
+		System.err.println("Extracting sample of subtitle");
+		Subtitle sampleSub = Subtitle.extract(movieFilename);
+		
+		
+		// synchronize the official sub using the sample sub
+		System.err.println("Synchronizing downloaded subtitle using sample");
+		Subtitle.synchronize(officialSub, sampleSub);
+		
+		// saving the synchronized subtitle 
+		System.err.println("Saving synchronized subtitle to file");
+		officialSub.saveToFile(outputFilename);
+		
 	}
-
-	public static void testAudioExtraction() {
-		String file = "data/video/chihaya.mkv";
-        String to = "data/audio/chihaya.mp3";
-        Xuggler.convert(file, to);
+	
+	public static String extractMovieName(String movieFilename) {
+		File f = new File(movieFilename);
+		return f.getName();
 	}
 	
 	public static void testSubtitleExtraction(int nSplit, int sampleRate) {
@@ -104,11 +130,10 @@ public class App
 
 	}
 
-	public static void testSubtitleDownload() {
+	public static void testSubtitleDownload(String videoFilename, String subtitleFilename) {
 		// download subtitle of a movie
 		System.out.println("Downloading subtitles");
-		String videoFilename = "Whiskey.Tango.Foxtrot.2016.720p.BluRay.x264-DRONES";
-		String subtitleFilename = SubtitleDownloader.downloadSubtitle(videoFilename);
+		SubtitleDownloader.downloadSubtitle(videoFilename, subtitleFilename);
 
 		// print downloaded file
 		System.out.println("Printing subtitles");

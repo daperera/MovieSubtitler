@@ -1,26 +1,18 @@
 package Test.Test;
 
-import subscene.api.model.Subtitle;
-import java.io.File;
+import Test.Test.subscene.SubtitleFinder;
 
 
 public class SubtitleDownloader {
 
-	private static String SUBTITLE_TEMP_FOLDER = "data/subtitles";
-	
 	/**
-	 * 
 	 * @param movieName name of the downloaded movie file
+	 * @param subtitleFilename 
 	 * @return location where subtitles srt file have been downloaded
 	 */
-	public static String downloadSubtitle(String movieName) {
+	public static void downloadSubtitle(String movieName, String subtitleFilename) {
 		movieName = removeExtension(movieName);
-		String videoFilename = SUBTITLE_TEMP_FOLDER + "/" + movieName + ".mkv";
-		File video = new File(videoFilename);
-        Subtitle sub = new Subtitle(video, Subtitle.Type.ForeignLangOnly);
-        sub.download();
-        String subFilename = removeExtension(videoFilename) + ".en.srt";
-        return subFilename;
+		SubtitleFinder.downloadSubtitle(movieName, subtitleFilename);
 	}
 	
 	private static String removeExtension(String filename) {
@@ -30,5 +22,4 @@ public class SubtitleDownloader {
 	        return filename;
 	    }
 	}
-
 }

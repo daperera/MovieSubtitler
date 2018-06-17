@@ -11,7 +11,6 @@ import com.google.cloud.speech.v1.SpeechRecognitionResult;
 import com.google.protobuf.ByteString;
 
 import Test.Test.subtitle.Subtitle;
-import Test.Test.subtitle.SubtitleFactory;
 import Test.Test.subtitle.Time;
 
 public class SubtitleSampleExtractor {
@@ -20,37 +19,30 @@ public class SubtitleSampleExtractor {
 	private static String AUDIO_TMP_FILENAME = AUDIO_TMP_DIR + "/out";
 	private static int SEGMENT_TIME = 55;
 
-	public static void main(String[] args) {
-		// start Time
-		long startTime = System.currentTimeMillis();
-
-		String videoFilename = "data/video/paterson.mp4";
+	public static Subtitle extract(String videoFilename) {
 		clearTmpDir();
-		extractAudio(videoFilename);
+		InterruptibleThread t = extractAudio(videoFilename);
 		int nFile = predictNSample(videoFilename);
 		Subtitle sub = extractSubtitle(nFile); 
-		System.out.println(sub);
-
-		// end time
-		long endTime = System.currentTimeMillis();
-		Time duration = new Time(endTime - startTime);
-		System.out.println("Elapsed time : " + duration);
+		t.interrupt();
+		clearTmpDir(); // clear tmp directory again
+		return sub;
 	}
-
+	
 	private static void clearTmpDir() {
 		System.err.println("Clearing directory " + AUDIO_TMP_DIR);
 		String cmd = "rm " + AUDIO_TMP_DIR + "/*";
-		BashAdapter.execute(cmd); // execute and wait for result
+		BashAdapter.executeAndWait(cmd); // execute and wait for result
 	}
 
-	private static void extractAudio(final String videoFilename) {
+	private static InterruptibleThread extractAudio(final String videoFilename) {
 		System.err.println("Extracting audio sample");
 		String cmd = "ffmpeg " +
 				"-i " + videoFilename + " " + 
 				"-af 'pan=mono|c0=FL' -f " +
 				"segment -segment_time " + SEGMENT_TIME + " " + 
 				AUDIO_TMP_FILENAME + "%03d.wav";
-		BashAdapter.executeThread(cmd); // execute without waiting
+		return BashAdapter.execute(cmd); // execute without waiting
 	}
 
 	/**
@@ -81,7 +73,7 @@ public class SubtitleSampleExtractor {
 
 				// if some subtitles were found
 				if(!response.getResultsList().isEmpty()) {
-					Subtitle sub = SubtitleFactory.subtitleFromGoogleDuration(results);
+					Subtitle sub = Subtitle.subtitleFromGoogleDuration(results);
 					return sub.shift(k*SEGMENT_TIME*1000);
 				}
 
@@ -100,7 +92,7 @@ public class SubtitleSampleExtractor {
 				"grep 'Stream\\(.*\\)Audio' | " + // select line concerning audio stream
 				"grep -o '[0-9]\\+ Hz' | " + // extract substring indicating sampling
 				"cut -d ' ' -f 1"; // extract substring indicating sampling
-		String output = BashAdapter.execute(cmd); // execute and get output	
+		String output = BashAdapter.executeAndWait(cmd); // execute and get output	
 		int audioSample = Integer.parseInt(output); 
 		return audioSample;
 	}
@@ -111,7 +103,7 @@ public class SubtitleSampleExtractor {
 				"grep 'Duration:' | " + // select line concerning duration
 				"cut -d ',' -f 1 | " + // extract substring indicating duration
 				"cut -d ' ' -f 4"; // extract substring indicating duration
-		String output = BashAdapter.execute(cmd); // execute and get output		
+		String output = BashAdapter.executeAndWait(cmd); // execute and get output		
 		Time time = Time.timeFromSrt(output); // time from string
 		return time;
 	}

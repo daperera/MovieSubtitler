@@ -6,8 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public final class BashAdapter {
-	
-	
+
+
 	/**
 	 * Execute a command using bash interpreter
 	 * The output of the command is capture in a string and is send as the 
@@ -17,7 +17,7 @@ public final class BashAdapter {
 	 * @param cmd bash command as a string
 	 * @return output of the command
 	 */
-	public static String execute(final String cmd) {
+	public static String executeAndWait(final String cmd) {
 		String result = null;
 		try {
 			Process p = new ProcessBuilder("bash.exe", "-c", cmd).start();
@@ -32,7 +32,7 @@ public final class BashAdapter {
 		return result;
 	}
 
-	
+
 	/**
 	 * Execute a command using bash interpreter
 	 * This function does not wait for the command to terminate
@@ -40,24 +40,40 @@ public final class BashAdapter {
 	 * 
 	 * @param cmd bash command as a string
 	 */
-	public static void executeThread(final String cmd) {
-		new Thread() {
+	public static InterruptibleThread execute(final String cmd) {
+		InterruptibleThread t = new InterruptibleThread() {
 			@Override
 			public void run() {
 				try {
-					new ProcessBuilder("bash.exe", "-c", cmd).start().waitFor();
-				} catch (Exception e) {
-					e.printStackTrace();
+					Process p = new ProcessBuilder("bash.exe", "-c", cmd).start();
+					while(running) {
+						try {
+							Thread.sleep(200);
+							// test if process has terminated
+							try {
+								p.exitValue();
+								running = false; // if p.exitValue() returns, then p has terminated and we can exit the main loop
+							} catch (IllegalThreadStateException itse) {}
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				} finally {
+					mainLoopExited = true;
 				}
 			}
-		}.start();
+		};
+		t.start();
+		return t;
 	}
-	
+
 	private class ThreadMessageListener extends Thread {
 		private String output;
 		private final BufferedReader reader;
 		private volatile boolean running = true;
-		
+
 		public ThreadMessageListener(InputStream in) {
 			this.reader = new BufferedReader(new InputStreamReader(in));
 			output = "";
@@ -73,7 +89,7 @@ public final class BashAdapter {
 						if(!firstMessage) output += '\n';
 						else firstMessage = false;
 						output += message;
-//						System.out.println("message : " + message);
+						//						System.out.println("message : " + message);
 					}
 					Thread.sleep(20);
 				} catch (Exception e) {
@@ -82,13 +98,14 @@ public final class BashAdapter {
 
 			}
 		}
-		
+
 		public void terminate() {
-	        running = false;
-	    }
-		
+			running = false;
+		}
+
 		public String getOutput() {
 			return output;
 		}
 	}
+
 }

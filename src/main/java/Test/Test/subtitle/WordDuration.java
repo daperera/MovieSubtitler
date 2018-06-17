@@ -1,6 +1,6 @@
 package Test.Test.subtitle;
 
-public class WordDuration {
+class WordDuration {
 	private Time start;
 	private Time end;
 

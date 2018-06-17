@@ -42,8 +42,8 @@ public class Time {
 	 * @ return shifted Time object
 	 */
 	public Time shift(long ms) {
-		Time t = new Time(ms);
-		return shift(t);
+		this.ms += ms;
+		return this;
 	}
 	
 	public long divide(Time t) {
